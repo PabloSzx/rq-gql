@@ -1,5 +1,4 @@
-import { gql } from "../generated";
-import { useGQLQuery } from "../rq";
+import { gql, useGQLQuery } from "../generated";
 
 export default function IndexPage() {
   const { isLoading, data } = useGQLQuery(

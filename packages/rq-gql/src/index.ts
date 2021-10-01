@@ -9,18 +9,26 @@ import {
 import { proxy, useSnapshot } from "valtio";
 
 export function RQGql({
-  endpoint,
   documents,
-  fetchOptions,
 }: {
   documents: Record<string, DocumentNode>;
-  endpoint: string;
-  fetchOptions?: Partial<RequestInit>;
 }) {
   const documentsMap = new WeakMap<DocumentNode, string>();
 
   for (const [docString, doc] of Object.entries(documents)) {
     documentsMap.set(doc, docString);
+  }
+
+  let endpoint = "/graphql";
+
+  let fetchOptions: Partial<RequestInit> = {};
+
+  function configureRQ(options: {
+    fetchOptions?: Partial<RequestInit>;
+    endpoint?: string;
+  }) {
+    if (options.fetchOptions) fetchOptions = options.fetchOptions;
+    if (endpoint) endpoint = endpoint;
   }
 
   function useGQLQuery<
@@ -106,5 +114,6 @@ export function RQGql({
     headers,
     fetcher,
     useHeadersSnapshot,
+    configureRQ,
   };
 }

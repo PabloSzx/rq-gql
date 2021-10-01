@@ -40,10 +40,10 @@ export const plugin: PluginFunction<{
     `\n`,
     `export function gql(source: string): DocumentNode | string;\n`,
     `export function gql(source: string) {\n`,
-    `  return (documents as Record<string, DocumentNode>)[source] ?? source;\n`,
+    `  return (documents as Record<string, DocumentNode>)[source] || source;\n`,
     `}\n`,
     documentTypePartial,
-    `\nexport const { headers, useGQLQuery, useHeadersSnapshot } = RQGql({ documents, endpoint: "/graphql" })\n`,
+    `\nexport const { useGQLQuery, headers, useHeadersSnapshot, fetcher, configureRQ } = RQGql({ documents })\n`,
   ].join(``);
 };
 

@@ -13,13 +13,16 @@ export function gql(
 
 export function gql(source: string): DocumentNode | string;
 export function gql(source: string) {
-  return (documents as Record<string, DocumentNode>)[source] ?? source;
+  return (documents as Record<string, DocumentNode>)[source] || source;
 }
 
 export type DocumentType<TDocumentNode extends DocumentNode<any, any>> =
   TDocumentNode extends DocumentNode<infer TType, any> ? TType : never;
 
-export const { headers, useGQLQuery, useHeadersSnapshot } = RQGql({
-  documents,
-  endpoint: "/graphql",
-});
+export const {
+  useGQLQuery,
+  headers,
+  useHeadersSnapshot,
+  fetcher,
+  configureRQ,
+} = RQGql({ documents });
