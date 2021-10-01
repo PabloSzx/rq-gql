@@ -4,7 +4,7 @@ documents:
   - "!**/generated/**"
 generates:
   ./src/generated/:
-    preset: gql-tag-operations-preset
+    preset: "@rq-gql/codegen"
     config:
       useTypeImports: true
       enumsAsConst: true
@@ -22,4 +22,4 @@ generates:
         Longitude: "number"
 hooks:
   afterAllFileWrite:
-    - node after-codegen-write.mjs
+    - prettier --write
