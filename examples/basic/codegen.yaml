@@ -1,0 +1,25 @@
+schema: https://learner-model.pablosz.dev/graphql
+documents:
+  - "**/*.{ts,tsx}"
+  - "!**/generated/**"
+generates:
+  ./src/generated/:
+    preset: gql-tag-operations-preset
+    config:
+      useTypeImports: true
+      enumsAsConst: true
+      scalars:
+        DateTime: "string"
+        JSONObject: "Record<string,unknown>"
+        Timestamp: "number"
+        URL: "string"
+        NonNegativeInt: "number"
+        NonEmptyString: "string"
+        EmailAddress: "string"
+        Void: "void | undefined | null"
+        IntID: "string"
+        Latitude: "number"
+        Longitude: "number"
+hooks:
+  afterAllFileWrite:
+    - node after-codegen-write.mjs
