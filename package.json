@@ -1,0 +1,27 @@
+{
+  "name": "rq-gql",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "prepare": "bob-esbuild tsc && pnpm -r prepack",
+    "dev": "bob-esbuild tsc && pnpm -r dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PabloSzx/rq-gql.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PabloSzx/rq-gql/issues"
+  },
+  "homepage": "https://github.com/PabloSzx/rq-gql#readme",
+  "devDependencies": {
+    "@types/node": "^16.10.2",
+    "@types/react": "^17.0.26",
+    "bob-esbuild": "^2.0.0",
+    "bob-esbuild-cli": "^2.0.0",
+    "esbuild": "^0.13.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "typescript": "^4.4.3"
+  }
+}
