@@ -2,19 +2,24 @@
   "name": "rq-gql",
   "version": "0.0.1",
   "private": true,
-  "scripts": {
-    "prepare": "bob-esbuild tsc && pnpm -r prepack",
-    "dev": "bob-esbuild tsc && pnpm -r dev"
+  "homepage": "https://github.com/PabloSzx/rq-gql#readme",
+  "bugs": {
+    "url": "https://github.com/PabloSzx/rq-gql/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PabloSzx/rq-gql.git"
   },
-  "bugs": {
-    "url": "https://github.com/PabloSzx/rq-gql/issues"
+  "scripts": {
+    "ci:release": "pnpm pretty && pnpm -r publish --access public --no-git-checks",
+    "ci:version": "pnpm pretty && changeset version && pnpm i --no-frozen-lockfile --lockfile-only --ignore-scripts && pnpm update -r \"@rq-gql/*\" rq-gql",
+    "dev": "bob-esbuild tsc && pnpm -r dev",
+    "prepare": "bob-esbuild tsc && pnpm -r prepack",
+    "pretty": "prettier --write \"**/*.{ts,tsx,json,yaml,js,cjs,mjs,mdx,md}\"",
+    "pretty:check": "prettier --check \"**/*.{ts,tsx,json,yaml,js,cjs,mjs,mdx}\""
   },
-  "homepage": "https://github.com/PabloSzx/rq-gql#readme",
   "devDependencies": {
+    "@changesets/cli": "^2.17.0",
     "@types/node": "^16.10.2",
     "@types/react": "^17.0.26",
     "bob-esbuild": "^2.0.0",

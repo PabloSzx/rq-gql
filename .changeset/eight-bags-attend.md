@@ -1,0 +1,5 @@
+---
+"rq-gql": minor
+---
+
+Release
