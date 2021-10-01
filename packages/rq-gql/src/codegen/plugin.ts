@@ -25,11 +25,11 @@ export const plugin: PluginFunction<{
   sourcesWithOperations: Array<SourceWithOperations>;
   useTypeImports?: boolean;
 }> = (_, __, { sourcesWithOperations, useTypeImports }, _info) => {
-  if (!sourcesWithOperations) {
-    return "";
-  }
+  if (!sourcesWithOperations) return "";
+
   return [
     `import * as graphql from './graphql';\n`,
+    `import { RQGql } from 'rq-gql';\n`,
     `${
       useTypeImports ? "import type" : "import"
     } { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';\n`,
@@ -38,11 +38,12 @@ export const plugin: PluginFunction<{
     `\n`,
     ...getGqlOverloadChunk(sourcesWithOperations),
     `\n`,
-    `export function gql(source: string): DocumentNode;\n`,
+    `export function gql(source: string): DocumentNode | string;\n`,
     `export function gql(source: string) {\n`,
-    `  return (documents as any)[source] ?? source;\n`,
+    `  return (documents as Record<string, DocumentNode>)[source] ?? source;\n`,
     `}\n`,
     documentTypePartial,
+    `\nexport const { headers, useGQLQuery, useHeadersSnapshot } = RQGql({ documents, endpoint: "/graphql" })\n`,
   ].join(``);
 };
 

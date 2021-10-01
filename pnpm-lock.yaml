@@ -29,8 +29,6 @@ importers:
       '@graphql-codegen/cli': ^2.2.0
       '@graphql-codegen/core': ^2.1.0
       '@graphql-typed-document-node/core': ^3.1.0
-      '@rq-gql/codegen': workspace:^0.0.1
-      '@rq-gql/core': workspace:^0.0.1
       '@types/node': ^16.10.2
       '@types/react': ^17.0.26
       concurrently: ^6.2.2
@@ -39,11 +37,11 @@ importers:
       react: ^17.0.2
       react-dom: ^17.0.2
       react-query: ^3.24.5
+      rq-gql: workspace:^0.0.1
     dependencies:
       '@graphql-codegen/cli': 2.2.0_282d702737718240fbf0ccc852cde709
       '@graphql-codegen/core': 2.1.0_graphql@15.6.0
       '@graphql-typed-document-node/core': 3.1.0_graphql@15.6.0
-      '@rq-gql/core': link:../../packages/core
       '@types/node': 16.10.2
       '@types/react': 17.0.26
       graphql: 15.6.0
@@ -52,10 +50,10 @@ importers:
       react-dom: 17.0.2_react@17.0.2
       react-query: 3.24.5_react-dom@17.0.2+react@17.0.2
     devDependencies:
-      '@rq-gql/codegen': link:../../packages/codegen
       concurrently: 6.2.2
+      rq-gql: link:../../packages/rq-gql
 
-  packages/codegen:
+  packages/rq-gql:
     specifiers:
       '@graphql-codegen/add': ^3.1.0
       '@graphql-codegen/core': ^2.1.0
@@ -65,8 +63,11 @@ importers:
       '@graphql-codegen/typescript-operations': ^2.1.5
       '@graphql-codegen/visitor-plugin-common': ^2.2.1
       '@graphql-tools/utils': ^8.2.4
+      '@graphql-typed-document-node/core': ^3.1.0
       commander: ^8.2.0
-      graphql: ^15.6.0
+      graphql: '*'
+      react-query: ^3.24.5
+      valtio: ^1.2.4
     dependencies:
       '@graphql-codegen/add': 3.1.0_graphql@15.6.0
       '@graphql-codegen/core': 2.1.0_graphql@15.6.0
@@ -78,15 +79,10 @@ importers:
       '@graphql-tools/utils': 8.2.4_graphql@15.6.0
       commander: 8.2.0
     devDependencies:
-      graphql: 15.6.0
-
-  packages/core:
-    specifiers:
-      graphql: ^15.6.0
-      react-query: ^3.24.5
-    devDependencies:
+      '@graphql-typed-document-node/core': 3.1.0_graphql@15.6.0
       graphql: 15.6.0
       react-query: 3.24.5_react-dom@17.0.2+react@17.0.2
+      valtio: 1.2.4_react@17.0.2
 
 packages:
 
@@ -1155,7 +1151,6 @@ packages:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
     dependencies:
       graphql: 15.6.0
-    dev: false
 
   /@hapi/accept/5.0.2:
     resolution: {integrity: sha512-CmzBx/bXUR8451fnZRuZAJRlzgm0Jgu5dltTX/bszmR2lheb9BpyN47Q1RbaGTsvFzn0PXAEs+lXDKfshccYZw==}
@@ -4511,6 +4506,10 @@ packages:
       asap: 2.0.6
     dev: false
 
+  /proxy-compare/2.0.2:
+    resolution: {integrity: sha512-3qUXJBariEj3eO90M3Rgqq3+/P5Efl0t/dl9g/1uVzIQmO3M+ql4hvNH3mYdu8H+1zcKv07YvL55tsY74jmH1A==}
+    dev: true
+
   /public-encrypt/4.0.3:
     resolution: {integrity: sha512-zVpa8oKZSz5bTMTFClc1fQOnyyEzpl5ozpi1B5YcvBrdohMjH2rfsBtyXcuNuwjsDIXmBYlF2N5FlJYhR29t8Q==}
     dependencies:
@@ -5536,6 +5535,28 @@ packages:
   /valid-url/1.0.9:
     resolution: {integrity: sha1-HBRHm0DxOXp1eC8RXkCGRHQzogA=}
     dev: false
+
+  /valtio/1.2.4_react@17.0.2:
+    resolution: {integrity: sha512-FipYZHGJXsSKObKNGOHwqqiA6T84T7LHhrPfM7ptt3e2uFao4djD5/u4JEb/z2O14fv1CFxIO05UWCuk3VT/qg==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      '@babel/helper-module-imports': '>=7.12'
+      '@babel/types': '>=7.13'
+      babel-plugin-macros: '>=3.0'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      '@babel/helper-module-imports':
+        optional: true
+      '@babel/types':
+        optional: true
+      babel-plugin-macros:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      proxy-compare: 2.0.2
+      react: 17.0.2
+    dev: true
 
   /value-or-promise/1.0.10:
     resolution: {integrity: sha512-1OwTzvcfXkAfabk60UVr5NdjtjJ0Fg0T5+B1bhxtrOEwSH2fe8y4DnLgoksfCyd8yZCOQQHB0qLMQnwgCjbXLQ==}

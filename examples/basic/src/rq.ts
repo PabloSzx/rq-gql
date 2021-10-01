@@ -4,7 +4,7 @@ import { QueryKey, useQuery, UseQueryOptions } from "react-query";
 
 const DocCache = new WeakMap<DocumentNode, string>();
 
-export function useGraphQLQuery<TData, TVariables>(
+export function useGQLQuery<TData, TVariables>(
   queryDoc: DocumentNode<TData, TVariables>,
   variables?: TVariables,
   options?: Omit<

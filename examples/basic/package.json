@@ -5,16 +5,15 @@
   "license": "MIT",
   "scripts": {
     "build": "next build",
-    "codegen": "graphql-codegen --config codegen.yaml",
-    "dev": "concurrently -r next pnpm:dev:codegen",
-    "dev:codegen": "graphql-codegen --config codegen.yaml --watch \"src/**/!generated/**/*\" --watch \"!src/generated\"",
+    "dev": "concurrently -r next pnpm:dev:generate",
+    "dev:generate": "graphql-codegen --config codegen.yaml --watch \"src/**/!generated/**/*\" --watch \"!src/generated\"",
+    "generate": "graphql-codegen --config codegen.yaml",
     "start": "next start"
   },
   "dependencies": {
     "@graphql-codegen/cli": "^2.2.0",
     "@graphql-codegen/core": "^2.1.0",
     "@graphql-typed-document-node/core": "^3.1.0",
-    "@rq-gql/core": "workspace:^0.0.1",
     "@types/node": "^16.10.2",
     "@types/react": "^17.0.26",
     "graphql": "^15.6.0",
@@ -24,7 +23,7 @@
     "react-query": "^3.24.5"
   },
   "devDependencies": {
-    "@rq-gql/codegen": "workspace:^0.0.1",
-    "concurrently": "^6.2.2"
+    "concurrently": "^6.2.2",
+    "rq-gql": "workspace:^0.0.1"
   }
 }

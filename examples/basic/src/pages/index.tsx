@@ -1,8 +1,8 @@
 import { gql } from "../generated";
-import { useGraphQLQuery } from "../rq";
+import { useGQLQuery } from "../rq";
 
 export default function IndexPage() {
-  const { isLoading, data } = useGraphQLQuery(
+  const { isLoading, data } = useGQLQuery(
     gql(/* GraphQL */ `
       query hello {
         hello

@@ -6,8 +6,8 @@ import * as typescriptOperationPlugin from "@graphql-codegen/typescript-operatio
 import { ClientSideBaseVisitor } from "@graphql-codegen/visitor-plugin-common";
 import type { Source } from "@graphql-tools/utils";
 import type { FragmentDefinitionNode, OperationDefinitionNode } from "graphql";
-import type { OperationOrFragment, SourceWithOperations } from "./tag-plugin";
-import * as gqlTagPlugin from "./tag-plugin";
+import type { OperationOrFragment, SourceWithOperations } from "./plugin";
+import * as gqlTagPlugin from "./plugin";
 
 export type GqlTagConfig = {};
 
