@@ -1,5 +1,11 @@
 # rq-gql
 
+## 0.1.6
+
+### Patch Changes
+
+- c1525bb: fix variables key
+
 ## 0.1.5
 
 ### Patch Changes
