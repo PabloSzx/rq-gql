@@ -1,5 +1,11 @@
 # rq-gql
 
+## 0.1.3
+
+### Patch Changes
+
+- fd186c9: re-export main types
+
 ## 0.1.2
 
 ### Patch Changes
