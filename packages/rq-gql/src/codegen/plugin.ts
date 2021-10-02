@@ -40,7 +40,7 @@ export const plugin: PluginFunction<{
     `\n`,
     `export function gql(source: string): DocumentNode | string;\n`,
     `export function gql(source: string) {\n`,
-    `  return (documents as Record<string, DocumentNode>)[source] || source;\n`,
+    `  return (documents as any)[source] || source;\n`,
     `}\n`,
     documentTypePartial,
     `\nexport const { useGQLQuery, useGQLMutation, useGQLInfiniteQuery, headers, useHeadersSnapshot, fetchGQL, configureRQ } = rqGQL()\n`,
