@@ -29,7 +29,7 @@ export const plugin: PluginFunction<{
 
   return [
     `import * as graphql from './graphql';\n`,
-    `import { RQGql } from 'rq-gql';\n`,
+    `import { rqGQL } from 'rq-gql';\n`,
     `${
       useTypeImports ? "import type" : "import"
     } { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';\n`,
@@ -43,7 +43,7 @@ export const plugin: PluginFunction<{
     `  return (documents as Record<string, DocumentNode>)[source] || source;\n`,
     `}\n`,
     documentTypePartial,
-    `\nexport const { useGQLQuery, headers, useHeadersSnapshot, fetcher, configureRQ } = RQGql({ documents })\n`,
+    `\nexport const { useGQLQuery, useGQLMutation, useGQLInfiniteQuery, headers, useHeadersSnapshot, fetchGQL, configureRQ } = rqGQL({ documents })\n`,
   ].join(``);
 };
 

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import * as graphql from "./graphql";
-import { RQGql } from "rq-gql";
+import { rqGQL } from "rq-gql";
 import type { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
 
 const documents = {
@@ -21,8 +21,10 @@ export type DocumentType<TDocumentNode extends DocumentNode<any, any>> =
 
 export const {
   useGQLQuery,
+  useGQLMutation,
+  useGQLInfiniteQuery,
   headers,
   useHeadersSnapshot,
-  fetcher,
+  fetchGQL,
   configureRQ,
-} = RQGql({ documents });
+} = rqGQL({ documents });

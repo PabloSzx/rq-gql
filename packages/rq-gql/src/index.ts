@@ -2,16 +2,22 @@ import type { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-
 import { ExecutionResult, print } from "graphql";
 import {
   QueryKey,
+  useInfiniteQuery,
+  UseInfiniteQueryOptions,
+  UseInfiniteQueryResult,
+  useMutation,
+  UseMutationOptions,
+  UseMutationResult,
   useQuery,
   UseQueryOptions,
   UseQueryResult,
 } from "react-query";
 import { proxy, useSnapshot } from "valtio";
 
-export function RQGql({
+export function rqGQL<Documents extends Record<string, DocumentNode>>({
   documents,
 }: {
-  documents: Record<string, DocumentNode>;
+  documents: Documents;
 }) {
   const documentsMap = new WeakMap<DocumentNode, string>();
 
@@ -42,27 +48,59 @@ export function RQGql({
       "queryKey" | "queryFn"
     >
   ): UseQueryResult<TData, Error> {
-    const key = getQueryString(queryDoc);
     return useQuery(
-      variables === undefined ? [key, variables] : key,
-      fetcher(queryDoc, variables),
+      getKey(queryDoc, variables),
+      fetchGQL(queryDoc, variables),
+      options
+    );
+  }
+
+  function useGQLMutation<
+    TData = Record<string, any>,
+    TVariables = Record<string, any>
+  >(
+    queryDoc: DocumentNode<TData, TVariables> | string,
+    variables?: TVariables,
+    options?: Omit<
+      UseMutationOptions<TData, Error, TVariables, any>,
+      "queryKey" | "queryFn"
+    >
+  ): UseMutationResult<TData, Error, TVariables> {
+    return useMutation<TData, Error, TVariables>(
+      (variablesArg: TVariables | undefined = variables) =>
+        fetchGQL<TData, TVariables>(queryDoc, variablesArg)(),
+      options
+    );
+  }
+
+  function useGQLInfiniteQuery<
+    TData = Record<string, any>,
+    TVariables = Record<string, any>
+  >(
+    queryDoc: DocumentNode<TData, TVariables> | string,
+    getVariables: (pageParam?: any) => TVariables,
+    options?: UseInfiniteQueryOptions<TData, Error, TData>
+  ): UseInfiniteQueryResult<TData, Error> {
+    return useInfiniteQuery<TData, Error, TData>(
+      getKey(queryDoc),
+      ({ pageParam }) => {
+        return fetchGQL<TData, TVariables>(queryDoc, getVariables(pageParam))();
+      },
       options
     );
   }
 
   function getQueryString(doc: DocumentNode | string) {
-    let key = typeof doc === "string" ? doc : documentsMap.get(doc);
+    if (typeof doc === "string") return doc;
 
-    if (key == null) {
-      if (typeof doc !== "string") {
-        key = typeof doc === "string" ? doc : print(doc);
-        documentsMap.set(doc, key);
-      } else {
-        key = doc;
-      }
+    let queryString = documentsMap.get(doc);
+
+    if (queryString == null) {
+      queryString = print(doc);
+      documentsMap.set(doc, queryString);
     }
 
-    return key;
+    return queryString;
   }
 
   const headers = proxy<Record<string, string>>({
@@ -71,7 +109,10 @@ export function RQGql({
 
   const useHeadersSnapshot = () => useSnapshot(headers);
 
-  function fetcher<TData, TVariables>(
+  function fetchGQL<
+    TData = Record<string, any>,
+    TVariables = Record<string, any>
+  >(
     queryDoc: DocumentNode<TData, TVariables> | string,
     variables?: TVariables
   ) {
@@ -109,11 +150,23 @@ export function RQGql({
     };
   }
 
+  function getKey<TVariables>(
+    queryDoc: DocumentNode<any, TVariables> | string,
+    variables?: TVariables
+  ): QueryKey {
+    const key = getQueryString(queryDoc);
+
+    return variables === undefined ? [key, variables] : [key];
+  }
+
   return {
     useGQLQuery,
+    useGQLMutation,
+    useGQLInfiniteQuery,
     headers,
-    fetcher,
+    fetchGQL,
     useHeadersSnapshot,
     configureRQ,
+    getKey,
   };
 }
