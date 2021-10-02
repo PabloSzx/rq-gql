@@ -44,6 +44,7 @@ export const plugin: PluginFunction<{
     `}\n`,
     documentTypePartial,
     `\nexport const { useGQLQuery, useGQLMutation, useGQLInfiniteQuery, headers, useHeadersSnapshot, fetchGQL, configureRQ } = rqGQL()\n`,
+    `\nexport * from './graphql';\n`,
   ].join(``);
 };
 
