@@ -13,7 +13,7 @@ export function gql(
 
 export function gql(source: string): DocumentNode | string;
 export function gql(source: string) {
-  return (documents as Record<string, DocumentNode>)[source] || source;
+  return (documents as any)[source] || source;
 }
 
 export type DocumentType<TDocumentNode extends DocumentNode<any, any>> =
