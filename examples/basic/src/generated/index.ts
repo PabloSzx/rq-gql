@@ -27,6 +27,7 @@ export const {
   useHeadersSnapshot,
   fetchGQL,
   configureRQ,
+  getKey,
 } = rqGQL();
 
 export * from "./graphql";

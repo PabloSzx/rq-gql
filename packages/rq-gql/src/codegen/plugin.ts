@@ -43,7 +43,7 @@ export const plugin: PluginFunction<{
     `  return (documents as any)[source] || source;\n`,
     `}\n`,
     documentTypePartial,
-    `\nexport const { useGQLQuery, useGQLMutation, useGQLInfiniteQuery, headers, useHeadersSnapshot, fetchGQL, configureRQ } = rqGQL()\n`,
+    `\nexport const { useGQLQuery, useGQLMutation, useGQLInfiniteQuery, headers, useHeadersSnapshot, fetchGQL, configureRQ, getKey } = rqGQL()\n`,
     `\nexport * from './graphql';\n`,
   ].join(``);
 };
