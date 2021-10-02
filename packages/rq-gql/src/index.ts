@@ -14,17 +14,7 @@ import {
 } from "react-query";
 import { proxy, useSnapshot } from "valtio";
 
-export function rqGQL<Documents extends Record<string, DocumentNode>>({
-  documents,
-}: {
-  documents: Documents;
-}) {
-  const documentsMap = new WeakMap<DocumentNode, string>();
-
-  for (const [docString, doc] of Object.entries(documents)) {
-    documentsMap.set(doc, docString);
-  }
-
+export function rqGQL() {
   let endpoint = "/graphql";
 
   let fetchOptions: Partial<RequestInit> = {};
@@ -90,14 +80,16 @@ export function rqGQL<Documents extends Record<string, DocumentNode>>({
     );
   }
 
+  const documentPrintCache = new WeakMap<DocumentNode, string>();
+
   function getQueryString(doc: DocumentNode | string) {
     if (typeof doc === "string") return doc;
 
-    let queryString = documentsMap.get(doc);
+    let queryString = documentPrintCache.get(doc);
 
     if (queryString == null) {
       queryString = print(doc);
-      documentsMap.set(doc, queryString);
+      documentPrintCache.set(doc, queryString);
     }
 
     return queryString;
