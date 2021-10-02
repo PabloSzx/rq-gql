@@ -147,7 +147,7 @@ export function rqGQL() {
   ): QueryKey {
     const key = getQueryString(queryDoc);
 
-    return variables === undefined ? [key, variables] : [key];
+    return variables == null ? [key] : [key, variables];
   }
 
   return {
