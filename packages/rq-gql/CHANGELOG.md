@@ -1,5 +1,11 @@
 # rq-gql
 
+## 0.1.5
+
+### Patch Changes
+
+- 3265877: generate export getKey
+
 ## 0.1.4
 
 ### Patch Changes
