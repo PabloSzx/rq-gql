@@ -50,15 +50,14 @@ export function rqGQL() {
     TVariables = Record<string, any>
   >(
     queryDoc: DocumentNode<TData, TVariables> | string,
-    variables?: TVariables,
     options?: Omit<
       UseMutationOptions<TData, Error, TVariables, any>,
       "queryKey" | "queryFn"
     >
   ): UseMutationResult<TData, Error, TVariables> {
     return useMutation<TData, Error, TVariables>(
-      (variablesArg: TVariables | undefined = variables) =>
-        fetchGQL<TData, TVariables>(queryDoc, variablesArg)(),
+      (variables?: TVariables) =>
+        fetchGQL<TData, TVariables>(queryDoc, variables)(),
       options
     );
   }
