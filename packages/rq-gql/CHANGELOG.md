@@ -1,5 +1,11 @@
 # rq-gql
 
+## 0.1.2
+
+### Patch Changes
+
+- 730ea34: fix documents type assertion
+
 ## 0.1.1
 
 ### Patch Changes
