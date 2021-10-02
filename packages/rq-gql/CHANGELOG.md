@@ -1,5 +1,11 @@
 # rq-gql
 
+## 0.1.4
+
+### Patch Changes
+
+- 08d7bdd: remove useless variables parameter in useMutation
+
 ## 0.1.3
 
 ### Patch Changes
