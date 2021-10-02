@@ -34,7 +34,7 @@ export function rqGQL<Documents extends Record<string, DocumentNode>>({
     endpoint?: string;
   }) {
     if (options.fetchOptions) fetchOptions = options.fetchOptions;
-    if (endpoint) endpoint = endpoint;
+    if (options.endpoint) endpoint = options.endpoint;
   }
 
   function useGQLQuery<
