@@ -15,15 +15,15 @@
     "@graphql-codegen/core": "^2.1.0",
     "@graphql-typed-document-node/core": "^3.1.0",
     "@types/node": "^16.10.2",
-    "@types/react": "^17.0.26",
-    "graphql": "^15.6.0",
+    "@types/react": "^17.0.27",
+    "graphql": "^15.6.1",
     "next": "^11.1.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-query": "^3.24.5"
+    "react-query": "^3.25.1"
   },
   "devDependencies": {
-    "concurrently": "^6.2.2",
+    "concurrently": "^6.3.0",
     "rq-gql": "workspace:^0.1.6"
   }
 }
