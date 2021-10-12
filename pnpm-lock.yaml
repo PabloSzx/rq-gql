@@ -39,7 +39,7 @@ importers:
       react: ^17.0.2
       react-dom: ^17.0.2
       react-query: ^3.26.0
-      rq-gql: workspace:^0.1.6
+      rq-gql: workspace:^0.2.0
     dependencies:
       '@graphql-codegen/cli': 2.2.0_2b311a31742146ac38e1effdcd578775
       '@graphql-codegen/core': 2.1.0_graphql@15.6.1

@@ -1,5 +1,11 @@
 # rq-gql
 
+## 0.2.0
+
+### Minor Changes
+
+- 881af6a: Improve API
+
 ## 0.1.6
 
 ### Patch Changes
