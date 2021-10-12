@@ -1,7 +1,6 @@
 /* eslint-disable */
-import * as graphql from "./graphql";
-import { rqGQL } from "rq-gql";
 import type { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
+import * as graphql from "./graphql";
 
 const documents = {
   "\n      query hello {\n        hello\n      }\n    ": graphql.HelloDocument,
@@ -18,16 +17,5 @@ export function gql(source: string) {
 
 export type DocumentType<TDocumentNode extends DocumentNode<any, any>> =
   TDocumentNode extends DocumentNode<infer TType, any> ? TType : never;
-
-export const {
-  useGQLQuery,
-  useGQLMutation,
-  useGQLInfiniteQuery,
-  headers,
-  useHeadersSnapshot,
-  fetchGQL,
-  configureRQ,
-  getKey,
-} = rqGQL();
 
 export * from "./graphql";

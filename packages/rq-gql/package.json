@@ -35,19 +35,18 @@
     "@graphql-codegen/typescript-operations": "^2.1.6",
     "@graphql-codegen/visitor-plugin-common": "^2.2.1",
     "@graphql-tools/utils": "^8.2.4",
-    "commander": "^8.2.0"
+    "commander": "^8.2.0",
+    "valtio": "^1.2.4"
   },
   "devDependencies": {
     "@graphql-typed-document-node/core": "^3.1.0",
     "graphql": "*",
-    "react-query": "^3.25.1",
-    "valtio": "^1.2.4"
+    "react-query": "^3.25.1"
   },
   "peerDependencies": {
     "@graphql-typed-document-node/core": "^3.1.0",
-    "graphql": "^15.6.0",
-    "react-query": "^3.24.5",
-    "valtio": "^1.2.4"
+    "graphql": "*",
+    "react-query": "^3.25.1"
   },
   "publishConfig": {
     "directory": "dist"

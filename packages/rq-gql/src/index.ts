@@ -1,6 +1,11 @@
 import type { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
-import { ExecutionResult, print } from "graphql";
+import type { ExecutionResult } from "graphql";
+import { print } from "graphql/language/printer.js";
+import { getOperationAST } from "graphql/utilities/getOperationAST.js";
+import { createContext, createElement, FC, useContext } from "react";
 import {
+  QueryClientProvider,
+  QueryClientProviderProps,
   QueryKey,
   useInfiniteQuery,
   UseInfiniteQueryOptions,
@@ -12,111 +17,126 @@ import {
   UseQueryOptions,
   UseQueryResult,
 } from "react-query";
-import { proxy, useSnapshot } from "valtio";
+import { proxy } from "valtio";
 
-export function rqGQL() {
-  let endpoint = "/graphql";
+export type QueryFetcher = <
+  TData = Record<string, any>,
+  TVariables = Record<string, any>
+>(
+  query: string,
+  variables?: TVariables | undefined
+) => () => Promise<TData>;
 
-  let fetchOptions: Partial<RequestInit> = {};
+export type FetchGQL = <
+  TData = Record<string, any>,
+  TVariables = Record<string, any>
+>(
+  queryDoc: DocumentNode<TData, TVariables> | string,
+  variables?: TVariables | undefined
+) => () => Promise<TData>;
 
-  function configureRQ(options: {
-    fetchOptions?: Partial<RequestInit>;
-    endpoint?: string;
-  }) {
-    if (options.fetchOptions) fetchOptions = options.fetchOptions;
-    if (options.endpoint) endpoint = options.endpoint;
-  }
+export const rqGQLContext = createContext<RQGQLClient | null>(null);
 
-  function useGQLQuery<
-    TData = Record<string, any>,
-    TVariables = Record<string, any>
-  >(
-    queryDoc: DocumentNode<TData, TVariables> | string,
-    variables?: TVariables,
-    options?: Omit<
-      UseQueryOptions<TData, Error, TData, QueryKey>,
-      "queryKey" | "queryFn"
-    >
-  ): UseQueryResult<TData, Error> {
-    return useQuery(
-      getKey(queryDoc, variables),
-      fetchGQL(queryDoc, variables),
-      options
-    );
-  }
+const useRQGQLContext = () => {
+  const ctx = useContext(rqGQLContext);
 
-  function useGQLMutation<
-    TData = Record<string, any>,
-    TVariables = Record<string, any>
-  >(
-    queryDoc: DocumentNode<TData, TVariables> | string,
-    options?: Omit<
-      UseMutationOptions<TData, Error, TVariables, any>,
-      "queryKey" | "queryFn"
-    >
-  ): UseMutationResult<TData, Error, TVariables> {
-    return useMutation<TData, Error, TVariables>(
-      (variables?: TVariables) =>
-        fetchGQL<TData, TVariables>(queryDoc, variables)(),
-      options
-    );
-  }
+  if (ctx == null) throw Error("rqGQLProvider is not present!");
 
-  function useGQLInfiniteQuery<
-    TData = Record<string, any>,
-    TVariables = Record<string, any>
-  >(
-    queryDoc: DocumentNode<TData, TVariables> | string,
-    getVariables: (pageParam?: any) => TVariables,
-    options?: UseInfiniteQueryOptions<TData, Error, TData>
-  ): UseInfiniteQueryResult<TData, Error> {
-    return useInfiniteQuery<TData, Error, TData>(
-      getKey(queryDoc),
-      ({ pageParam }) => {
-        return fetchGQL<TData, TVariables>(queryDoc, getVariables(pageParam))();
-      },
-      options
-    );
-  }
+  return ctx;
+};
 
-  const documentPrintCache = new WeakMap<DocumentNode, string>();
+export class RQGQLClient {
+  public readonly headers: { [K in string]?: string };
+  public readonly fetchOptions;
+  public readonly fetchGQL: FetchGQL;
 
-  function getQueryString(doc: DocumentNode | string) {
-    if (typeof doc === "string") return doc;
-
-    let queryString = documentPrintCache.get(doc);
-
-    if (queryString == null) {
-      queryString = print(doc);
-      documentPrintCache.set(doc, queryString);
+  constructor(
+    options: (
+      | {
+          queryFetcher: QueryFetcher;
+          endpoint?: never;
+        }
+      | {
+          queryFetcher?: never;
+          endpoint: string;
+        }
+    ) & {
+      headers?: { [K in string]?: string };
+      fetchOptions?: Partial<RequestInit>;
     }
-
-    return queryString;
-  }
-
-  const headers = proxy<Record<string, string>>({
-    "content-type": "application/json",
-  });
-
-  const useHeadersSnapshot = () => useSnapshot(headers);
-
-  function fetchGQL<
-    TData = Record<string, any>,
-    TVariables = Record<string, any>
-  >(
-    queryDoc: DocumentNode<TData, TVariables> | string,
-    variables?: TVariables
   ) {
-    return async (): Promise<TData> => {
-      const query = getQueryString(queryDoc);
+    const headers = (this.headers = proxy<{ [K in string]?: string }>({
+      "content-type": "application/json",
+      ...options.headers,
+    }));
+
+    const fetchOptions = (this.fetchOptions = { ...options.fetchOptions });
+
+    const { endpoint } = options;
+
+    const queryFetcher: QueryFetcher =
+      options.queryFetcher ||
+      (() => {
+        if (!endpoint) throw Error("Endpoint not specified for rqGQLProvider!");
+
+        return defaultQueryFetcher(endpoint, {
+          headers,
+          fetchOptions,
+        });
+      })();
+
+    this.fetchGQL = (queryDoc, variables) => {
+      return async () => {
+        const queryString = getQueryString(queryDoc);
+
+        return queryFetcher<any>(queryString, variables)();
+      };
+    };
+  }
+}
+
+export const RQGQLProvider: FC<{ rqGQLClient: RQGQLClient }> = ({
+  children,
+  rqGQLClient: value,
+}) => {
+  return createElement(rqGQLContext.Provider, {
+    children,
+    value,
+  });
+};
+
+export const CombinedRQGQLProvider: FC<
+  QueryClientProviderProps & { rqGQLClient: RQGQLClient }
+> = ({ rqGQLClient, ...reactQuery }) => {
+  return createElement(rqGQLContext.Provider, {
+    children: createElement(QueryClientProvider, reactQuery),
+    value: rqGQLClient,
+  });
+};
+
+export type DefaultQueryFetcherOptions = {
+  headers?: { [K in string]?: string };
+  fetchOptions?: Partial<RequestInit>;
+};
+
+export const defaultQueryFetcher: (
+  endpoint: string,
+  options?: DefaultQueryFetcherOptions
+) => QueryFetcher =
+  (endpoint, { headers, fetchOptions } = {}) =>
+  (query, variables) => {
+    return async () => {
       const res = await fetch(endpoint, {
         method: "POST",
-        headers,
+        headers: {
+          "content-type": "application/json",
+          ...headers,
+        },
         body: JSON.stringify({ query, variables }),
         ...fetchOptions,
       });
 
-      const { errors, data }: ExecutionResult<TData> = await res.json();
+      const { errors, data }: ExecutionResult<any> = await res.json();
 
       if (errors?.length) {
         if (errors.length > 1) {
@@ -137,27 +157,108 @@ export function rqGQL() {
         throw new Error(message);
       }
 
-      return data!;
+      return data;
     };
-  }
-
-  function getKey<TVariables>(
-    queryDoc: DocumentNode<any, TVariables> | string,
-    variables?: TVariables
-  ): QueryKey {
-    const key = getQueryString(queryDoc);
-
-    return variables == null ? [key] : [key, variables];
-  }
-
-  return {
-    useGQLQuery,
-    useGQLMutation,
-    useGQLInfiniteQuery,
-    headers,
-    fetchGQL,
-    useHeadersSnapshot,
-    configureRQ,
-    getKey,
   };
+
+const documentPrintCache = new WeakMap<DocumentNode, string>();
+
+function getQueryString(doc: DocumentNode | string) {
+  if (typeof doc === "string") return doc;
+
+  let queryString = documentPrintCache.get(doc);
+
+  if (queryString == null) {
+    queryString = print(doc);
+    documentPrintCache.set(doc, queryString);
+  }
+
+  return queryString;
+}
+
+const operationASTCache = new WeakMap<DocumentNode, string | null>();
+
+function getKey<TVariables>(
+  queryDoc: DocumentNode<any, TVariables> | string,
+  variables?: TVariables
+): readonly [string, TVariables?] {
+  let key: string;
+
+  if (typeof queryDoc === "string") {
+    key = queryDoc;
+  } else {
+    let astCacheValue = operationASTCache.get(queryDoc);
+
+    if (astCacheValue) {
+      key = astCacheValue;
+    } else if (astCacheValue === undefined) {
+      astCacheValue = getOperationAST(queryDoc)?.name?.value || null;
+
+      operationASTCache.set(queryDoc, astCacheValue);
+
+      key = astCacheValue || getQueryString(queryDoc);
+    } else {
+      key = getQueryString(queryDoc);
+    }
+  }
+
+  return variables == null ? [key] : [key, variables];
+}
+
+export function useGQLQuery<
+  TData = Record<string, any>,
+  TVariables = Record<string, any>
+>(
+  queryDoc: DocumentNode<TData, TVariables> | string,
+  variables?: TVariables,
+  options?: Omit<
+    UseQueryOptions<TData, Error, TData, QueryKey>,
+    "queryKey" | "queryFn"
+  >
+): UseQueryResult<TData, Error> {
+  const { fetchGQL } = useRQGQLContext();
+
+  return useQuery(
+    getKey(queryDoc, variables),
+    fetchGQL(queryDoc, variables),
+    options
+  );
+}
+
+export function useGQLMutation<
+  TData = Record<string, any>,
+  TVariables = Record<string, any>
+>(
+  queryDoc: DocumentNode<TData, TVariables> | string,
+  options?: Omit<
+    UseMutationOptions<TData, Error, TVariables, any>,
+    "queryKey" | "queryFn"
+  >
+): UseMutationResult<TData, Error, TVariables> {
+  const { fetchGQL } = useRQGQLContext();
+
+  return useMutation<TData, Error, TVariables>(
+    (variables?: TVariables) =>
+      fetchGQL<TData, TVariables>(queryDoc, variables)(),
+    options
+  );
+}
+
+export function useGQLInfiniteQuery<
+  TData = Record<string, any>,
+  TVariables = Record<string, any>
+>(
+  queryDoc: DocumentNode<TData, TVariables> | string,
+  getVariables: (pageParam?: any) => TVariables,
+  options?: UseInfiniteQueryOptions<TData, Error, TData>
+): UseInfiniteQueryResult<TData, Error> {
+  const { fetchGQL } = useRQGQLContext();
+
+  return useInfiniteQuery<TData, Error, TData>(
+    getKey(queryDoc),
+    ({ pageParam }) => {
+      return fetchGQL<TData, TVariables>(queryDoc, getVariables(pageParam))();
+    },
+    options
+  );
 }

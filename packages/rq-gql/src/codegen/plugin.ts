@@ -28,11 +28,10 @@ export const plugin: PluginFunction<{
   if (!sourcesWithOperations) return "";
 
   return [
-    `import * as graphql from './graphql';\n`,
-    `import { rqGQL } from 'rq-gql';\n`,
     `${
       useTypeImports ? "import type" : "import"
     } { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';\n`,
+    `import * as graphql from './graphql';\n`,
     `\n`,
     ...getDocumentRegistryChunk(sourcesWithOperations),
     `\n`,
@@ -43,7 +42,6 @@ export const plugin: PluginFunction<{
     `  return (documents as any)[source] || source;\n`,
     `}\n`,
     documentTypePartial,
-    `\nexport const { useGQLQuery, useGQLMutation, useGQLInfiniteQuery, headers, useHeadersSnapshot, fetchGQL, configureRQ, getKey } = rqGQL()\n`,
     `\nexport * from './graphql';\n`,
   ].join(``);
 };

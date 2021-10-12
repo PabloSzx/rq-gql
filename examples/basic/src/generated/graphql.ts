@@ -19,6 +19,8 @@ export type Scalars = {
   Float: number;
   /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   DateTime: string;
+  /** A field whose value conforms to the standard internet email address format as specified in RFC822: https://www.w3.org/Protocols/rfc822/. */
+  EmailAddress: string;
   /** ID that parses as non-negative integer, serializes to string, and can be passed as string or number */
   IntID: string;
   /** The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
@@ -96,10 +98,15 @@ export type AdminActionQueriesAllActionsArgs = {
 export type AdminContentMutations = {
   __typename?: "AdminContentMutations";
   createContent: Content;
+  updateContent: Content;
 };
 
 export type AdminContentMutationsCreateContentArgs = {
   data: CreateContent;
+};
+
+export type AdminContentMutationsUpdateContentArgs = {
+  data: UpdateContent;
 };
 
 export type AdminContentQueries = {
@@ -191,11 +198,11 @@ export type AdminUserMutations = {
   __typename?: "AdminUserMutations";
   createGroup: Group;
   setProjectsToUsers: Array<User>;
-  setUserGroups: Array<User>;
+  setUserGroups: Array<Group>;
   updateGroup: Group;
   updateUser: User;
-  /** Upsert specified users, if user with specified email already exists, updates it with the specified name */
-  upsertUsers: Array<User>;
+  /** Upsert specified users with specified project */
+  upsertUsersWithProjects: Array<User>;
 };
 
 export type AdminUserMutationsCreateGroupArgs = {
@@ -209,7 +216,7 @@ export type AdminUserMutationsSetProjectsToUsersArgs = {
 
 export type AdminUserMutationsSetUserGroupsArgs = {
   groupIds: Array<Scalars["IntID"]>;
-  userIds: Array<Scalars["IntID"]>;
+  usersEmails: Array<Scalars["EmailAddress"]>;
 };
 
 export type AdminUserMutationsUpdateGroupArgs = {
@@ -220,8 +227,9 @@ export type AdminUserMutationsUpdateUserArgs = {
   data: UpdateUserInput;
 };
 
-export type AdminUserMutationsUpsertUsersArgs = {
-  data: Array<UpsertUserInput>;
+export type AdminUserMutationsUpsertUsersWithProjectsArgs = {
+  emails: Array<Scalars["EmailAddress"]>;
+  projectsIds: Array<Scalars["IntID"]>;
 };
 
 export type AdminUserQueries = {
@@ -245,12 +253,17 @@ export type Connection = {
 export type Content = {
   __typename?: "Content";
   binaryBase64?: Maybe<Scalars["String"]>;
+  code: Scalars["String"];
   createdAt: Scalars["DateTime"];
   description: Scalars["String"];
   domain: Domain;
   id: Scalars["IntID"];
   json?: Maybe<Scalars["JSONObject"]>;
+  kcs: Array<Kc>;
+  label: Scalars["String"];
   project: Project;
+  sortIndex?: Maybe<Scalars["Int"]>;
+  tags: Array<Scalars["String"]>;
   updatedAt: Scalars["DateTime"];
   url?: Maybe<Scalars["String"]>;
 };
@@ -263,11 +276,15 @@ export type ContentConnection = Connection & {
 
 export type CreateContent = {
   binaryBase64?: Maybe<Scalars["String"]>;
+  code: Scalars["String"];
   description: Scalars["String"];
   domainId: Scalars["IntID"];
   json?: Maybe<Scalars["JSONObject"]>;
+  kcs: Array<Scalars["IntID"]>;
+  label: Scalars["String"];
   projectId: Scalars["IntID"];
-  topicId?: Maybe<Scalars["IntID"]>;
+  tags: Array<Scalars["String"]>;
+  topics: Array<Scalars["IntID"]>;
   url?: Maybe<Scalars["String"]>;
 };
 
@@ -296,6 +313,7 @@ export type CreateProject = {
 
 export type CreateTopic = {
   code: Scalars["String"];
+  contentIds: Array<Scalars["IntID"]>;
   domainId: Scalars["IntID"];
   label: Scalars["String"];
   parentTopicId?: Maybe<Scalars["IntID"]>;
@@ -313,11 +331,13 @@ export type Domain = {
   __typename?: "Domain";
   code: Scalars["String"];
   content: ContentConnection;
+  createdAt: Scalars["DateTime"];
   id: Scalars["IntID"];
   kcs: Array<Kc>;
   label: Scalars["String"];
   project: Project;
   topics: Array<Topic>;
+  updatedAt: Scalars["DateTime"];
 };
 
 export type DomainContentArgs = {
@@ -333,10 +353,12 @@ export type DomainsConnection = Connection & {
 export type Group = {
   __typename?: "Group";
   code: Scalars["String"];
+  createdAt: Scalars["DateTime"];
   id: Scalars["IntID"];
   label: Scalars["String"];
   projects: Array<Project>;
   projectsIds: Array<Scalars["IntID"]>;
+  updatedAt: Scalars["DateTime"];
   users: Array<User>;
 };
 
@@ -349,10 +371,12 @@ export type GroupsConnection = Connection & {
 export type Kc = {
   __typename?: "KC";
   code: Scalars["String"];
+  createdAt: Scalars["DateTime"];
   domain: Domain;
   id: Scalars["IntID"];
   label: Scalars["String"];
   topics: Array<Topic>;
+  updatedAt: Scalars["DateTime"];
 };
 
 export type KCsConnection = Connection & {
@@ -390,9 +414,11 @@ export type PageInfo = {
 export type Project = {
   __typename?: "Project";
   code: Scalars["String"];
+  createdAt: Scalars["DateTime"];
   domains: Array<Domain>;
   id: Scalars["IntID"];
   label: Scalars["String"];
+  updatedAt: Scalars["DateTime"];
 };
 
 export type ProjectsConnection = Connection & {
@@ -452,17 +478,16 @@ export type Topic = {
   __typename?: "Topic";
   childrens: Array<Topic>;
   code: Scalars["String"];
-  content: ContentConnection;
+  content: Array<Content>;
+  createdAt: Scalars["DateTime"];
   domain: Domain;
   id: Scalars["IntID"];
   kcs: Array<Kc>;
   label: Scalars["String"];
   parent?: Maybe<Topic>;
   project: Project;
-};
-
-export type TopicContentArgs = {
-  pagination: CursorConnectionArgs;
+  sortIndex?: Maybe<Scalars["Int"]>;
+  updatedAt: Scalars["DateTime"];
 };
 
 export type TopicsConnection = Connection & {
@@ -471,7 +496,23 @@ export type TopicsConnection = Connection & {
   pageInfo: PageInfo;
 };
 
+export type UpdateContent = {
+  binaryBase64?: Maybe<Scalars["String"]>;
+  code: Scalars["String"];
+  description: Scalars["String"];
+  domainId: Scalars["IntID"];
+  id: Scalars["IntID"];
+  json?: Maybe<Scalars["JSONObject"]>;
+  kcs: Array<Scalars["IntID"]>;
+  label: Scalars["String"];
+  projectId: Scalars["IntID"];
+  tags: Array<Scalars["String"]>;
+  topics: Array<Scalars["IntID"]>;
+  url?: Maybe<Scalars["String"]>;
+};
+
 export type UpdateDomain = {
+  code: Scalars["String"];
   id: Scalars["IntID"];
   label: Scalars["String"];
 };
@@ -497,6 +538,7 @@ export type UpdateProject = {
 
 export type UpdateTopic = {
   code: Scalars["String"];
+  contentIds: Array<Scalars["IntID"]>;
   domainId: Scalars["IntID"];
   id: Scalars["IntID"];
   label: Scalars["String"];
@@ -507,12 +549,8 @@ export type UpdateTopic = {
 export type UpdateUserInput = {
   id: Scalars["IntID"];
   locked: Scalars["Boolean"];
+  projectIds: Array<Scalars["IntID"]>;
   role: UserRole;
-};
-
-export type UpsertUserInput = {
-  email: Scalars["String"];
-  name?: Maybe<Scalars["String"]>;
 };
 
 export type User = {
@@ -538,7 +576,7 @@ export const UserRole = {
 } as const;
 
 export type UserRole = typeof UserRole[keyof typeof UserRole];
-export type UsersConnection = {
+export type UsersConnection = Connection & {
   __typename?: "UsersConnection";
   nodes: Array<User>;
   pageInfo: PageInfo;
