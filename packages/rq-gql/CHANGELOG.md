@@ -1,5 +1,11 @@
 # rq-gql
 
+## 0.2.1
+
+### Patch Changes
+
+- 9e61e04: re-export rq-gql
+
 ## 0.2.0
 
 ### Minor Changes
