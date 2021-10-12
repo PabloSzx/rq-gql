@@ -18,4 +18,5 @@ export function gql(source: string) {
 export type DocumentType<TDocumentNode extends DocumentNode<any, any>> =
   TDocumentNode extends DocumentNode<infer TType, any> ? TType : never;
 
+export * from "rq-gql";
 export * from "./graphql";

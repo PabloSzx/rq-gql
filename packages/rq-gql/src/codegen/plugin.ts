@@ -42,6 +42,7 @@ export const plugin: PluginFunction<{
     `  return (documents as any)[source] || source;\n`,
     `}\n`,
     documentTypePartial,
+    `\nexport * from 'rq-gql';`,
     `\nexport * from './graphql';\n`,
   ].join(``);
 };
