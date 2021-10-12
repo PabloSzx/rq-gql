@@ -1,5 +1,11 @@
 # rq-gql
 
+## 0.2.2
+
+### Patch Changes
+
+- 68a3fd7: fix export getKey
+
 ## 0.2.1
 
 ### Patch Changes
