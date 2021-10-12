@@ -178,7 +178,7 @@ function getQueryString(doc: DocumentNode | string) {
 
 const operationASTCache = new WeakMap<DocumentNode, string | null>();
 
-function getKey<TVariables>(
+export function getKey<TVariables>(
   queryDoc: DocumentNode<any, TVariables> | string,
   variables?: TVariables
 ): readonly [string, TVariables?] {
