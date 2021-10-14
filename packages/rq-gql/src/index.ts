@@ -255,7 +255,7 @@ export function useGQLInfiniteQuery<
   const { fetchGQL } = useRQGQLContext();
 
   return useInfiniteQuery<TData, Error, TData>(
-    getKey(queryDoc),
+    options?.queryKey || getKey(queryDoc),
     ({ pageParam }) => {
       return fetchGQL<TData, TVariables>(queryDoc, getVariables(pageParam))();
     },
