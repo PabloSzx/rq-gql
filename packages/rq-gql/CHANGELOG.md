@@ -1,5 +1,11 @@
 # rq-gql
 
+## 0.2.3
+
+### Patch Changes
+
+- 88ba1ec: useGQLInfiniteQuery: overwrite query key with "queryKey" option
+
 ## 0.2.2
 
 ### Patch Changes
