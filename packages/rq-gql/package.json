@@ -9,22 +9,17 @@
   "license": "MIT",
   "author": "PabloSzx <pablosaez1995@gmail.com>",
   "sideEffects": false,
+  "type": "module",
   "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
-    },
-    "./*": {
-      "require": "./dist/*.js",
-      "import": "./dist/*.mjs"
-    }
+    ".": "./dist/index.js",
+    "./*": "./dist/*.js"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "bob-esbuild watch",
-    "prepack": "bob-esbuild build"
+    "dev": "bob-ts-watch --target=es2019 --no-sourcemap -i src",
+    "prepack": "bob-ts --target=es2019 --no-sourcemap -i src && bob-esbuild tsc"
   },
   "dependencies": {
     "@graphql-codegen/add": "^3.1.0",
@@ -50,7 +45,15 @@
     "graphql": "*",
     "react-query": "^3.26.0"
   },
-  "publishConfig": {
-    "directory": "dist"
+  "typesVersions": {
+    "*": {
+      "dist/index.d.ts": [
+        "dist/index.d.ts"
+      ],
+      "*": [
+        "dist/*",
+        "dist/*/index.d.ts"
+      ]
+    }
   }
 }
