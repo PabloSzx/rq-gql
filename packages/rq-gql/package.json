@@ -15,7 +15,6 @@
     "./*": "./dist/*.js"
   },
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "bob-ts-watch --target=es2019 --no-sourcemap -i src",
