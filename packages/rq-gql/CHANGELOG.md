@@ -1,5 +1,11 @@
 # rq-gql
 
+## 0.3.0
+
+### Minor Changes
+
+- 71fefb2: ESM Only
+
 ## 0.2.3
 
 ### Patch Changes
