@@ -1,5 +1,11 @@
 # rq-gql
 
+## 0.3.1
+
+### Patch Changes
+
+- 74ecb89: Preset cjs for codegen
+
 ## 0.3.0
 
 ### Minor Changes
