@@ -161,9 +161,11 @@ export const defaultQueryFetcher: (
     };
   };
 
-const documentPrintCache = new WeakMap<DocumentNode, string>();
+const documentPrintCache = new WeakMap<DocumentNode<any, any>, string>();
 
-function getQueryString(doc: DocumentNode | string) {
+function getQueryString<Result, Variables>(
+  doc: DocumentNode<Result, Variables> | string
+) {
   if (typeof doc === "string") return doc;
 
   let queryString = documentPrintCache.get(doc);
@@ -176,7 +178,7 @@ function getQueryString(doc: DocumentNode | string) {
   return queryString;
 }
 
-const operationASTCache = new WeakMap<DocumentNode, string | null>();
+const operationASTCache = new WeakMap<DocumentNode<any, any>, string | null>();
 
 export function getKey<TVariables>(
   queryDoc: DocumentNode<any, TVariables> | string,

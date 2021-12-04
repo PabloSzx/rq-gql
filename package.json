@@ -1,5 +1,5 @@
 {
-  "name": "rq-gql",
+  "name": "rq-gql-monorepo",
   "version": "0.0.1",
   "private": true,
   "homepage": "https://github.com/PabloSzx/rq-gql#readme",
@@ -19,16 +19,16 @@
     "pretty:check": "prettier --check \"**/*.{ts,tsx,json,yaml,js,cjs,mjs,mdx}\""
   },
   "devDependencies": {
-    "@changesets/cli": "^2.17.0",
-    "@types/node": "^16.11.6",
-    "@types/react": "^17.0.33",
-    "bob-esbuild": "^2.1.1",
-    "bob-esbuild-cli": "^2.0.0",
-    "bob-ts": "^1.1.6",
-    "esbuild": "^0.13.12",
-    "prettier": "^2.4.1",
+    "@changesets/cli": "^2.18.1",
+    "@types/node": "^16.11.11",
+    "@types/react": "^17.0.37",
+    "bob-esbuild": "^3.1.1",
+    "bob-esbuild-cli": "^3.0.1",
+    "bob-ts": "^1.2.2",
+    "esbuild": "^0.14.2",
+    "prettier": "^2.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "typescript": "^4.4.4"
+    "typescript": "^4.5.2"
   }
 }

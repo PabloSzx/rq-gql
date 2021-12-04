@@ -11,19 +11,19 @@
     "start": "next start"
   },
   "dependencies": {
-    "@graphql-codegen/cli": "^2.2.2",
+    "@graphql-codegen/cli": "^2.3.0",
     "@graphql-codegen/core": "^2.3.0",
-    "@graphql-typed-document-node/core": "^3.1.0",
-    "@types/node": "^16.11.6",
-    "@types/react": "^17.0.33",
-    "graphql": "^16.0.0",
-    "next": "^12.0.2",
+    "@graphql-typed-document-node/core": "^3.1.1",
+    "@types/node": "^16.11.11",
+    "@types/react": "^17.0.37",
+    "graphql": "^16.0.1",
+    "next": "^12.0.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-query": "^3.31.0"
+    "react-query": "^3.34.0"
   },
   "devDependencies": {
-    "concurrently": "^6.3.0",
+    "concurrently": "^6.4.0",
     "rq-gql": "workspace:^0.3.1"
   }
 }
