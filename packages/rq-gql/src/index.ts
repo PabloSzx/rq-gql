@@ -85,11 +85,28 @@ export class RQGQLClient {
         });
       })();
 
+    const fetchsOnTheFly: Record<string, Promise<any>> = {};
+
     this.fetchGQL = (queryDoc, variables) => {
       return async () => {
         const queryString = getQueryString(queryDoc);
 
-        return queryFetcher<any>(queryString, variables)();
+        const fetchKey = variables
+          ? queryString + JSON.stringify(variables)
+          : queryString;
+
+        const existingFetch = fetchsOnTheFly[fetchKey];
+
+        if (existingFetch) return existingFetch;
+
+        try {
+          return await (fetchsOnTheFly[fetchKey] = queryFetcher<any>(
+            queryString,
+            variables
+          )());
+        } finally {
+          delete fetchsOnTheFly[fetchKey];
+        }
       };
     };
   }
