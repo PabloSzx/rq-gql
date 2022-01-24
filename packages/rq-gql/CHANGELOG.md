@@ -1,5 +1,11 @@
 # rq-gql
 
+## 0.4.3
+
+### Patch Changes
+
+- be1d338: Rollback to 0.3.2 and set valtio as peer dependency
+
 ## 0.3.2
 
 ### Patch Changes
