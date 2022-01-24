@@ -24,6 +24,6 @@
   },
   "devDependencies": {
     "concurrently": "^7.0.0",
-    "rq-gql": "workspace:^0.4.1"
+    "rq-gql": "workspace:^0.4.2"
   }
 }

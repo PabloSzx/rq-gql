@@ -1,5 +1,11 @@
 # rq-gql
 
+## 0.4.2
+
+### Patch Changes
+
+- f2db3c5: Fix preset export
+
 ## 0.4.1
 
 ### Patch Changes
