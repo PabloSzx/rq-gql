@@ -20,10 +20,11 @@
     "next": "^12.0.8",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-query": "^3.34.8"
+    "react-query": "^3.34.8",
+    "valtio": "1.2.8"
   },
   "devDependencies": {
     "concurrently": "^7.0.0",
-    "rq-gql": "workspace:^0.3.2"
+    "rq-gql": "workspace:^0.4.2"
   }
 }

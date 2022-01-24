@@ -41,7 +41,8 @@ importers:
       react: ^17.0.2
       react-dom: ^17.0.2
       react-query: ^3.34.8
-      rq-gql: workspace:^0.3.2
+      rq-gql: workspace:^0.4.2
+      valtio: 1.2.8
     dependencies:
       '@graphql-codegen/cli': 2.3.1_f1c8288e56b492a9a33380eaae56dedc
       '@graphql-codegen/core': 2.4.0_graphql@16.2.0
@@ -53,6 +54,7 @@ importers:
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       react-query: 3.34.8_react-dom@17.0.2+react@17.0.2
+      valtio: 1.2.8_react@17.0.2
     devDependencies:
       concurrently: 7.0.0
       rq-gql: link:../../packages/rq-gql
@@ -73,7 +75,7 @@ importers:
       graphql: '*'
       react: ^17.0.2
       react-query: ^3.34.8
-      valtio: ^1.2.8
+      valtio: 1.2.8
     dependencies:
       '@graphql-codegen/add': 3.1.1_graphql@16.2.0
       '@graphql-codegen/core': 2.4.0_graphql@16.2.0
@@ -84,13 +86,13 @@ importers:
       '@graphql-codegen/visitor-plugin-common': 2.5.2_graphql@16.2.0
       '@graphql-tools/utils': 8.6.1_graphql@16.2.0
       commander: 8.3.0
-      valtio: 1.2.8_react@17.0.2
     devDependencies:
       '@graphql-typed-document-node/core': 3.1.1_graphql@16.2.0
       '@types/react': 17.0.38
       graphql: 16.2.0
       react: 17.0.2
       react-query: 3.34.8_react-dom@17.0.2+react@17.0.2
+      valtio: 1.2.8_react@17.0.2
 
 packages:
 
@@ -4141,7 +4143,6 @@ packages:
 
   /proxy-compare/2.0.2:
     resolution: {integrity: sha512-3qUXJBariEj3eO90M3Rgqq3+/P5Efl0t/dl9g/1uVzIQmO3M+ql4hvNH3mYdu8H+1zcKv07YvL55tsY74jmH1A==}
-    dev: false
 
   /pseudomap/1.0.2:
     resolution: {integrity: sha1-8FKijacOYYkX7wqKw0wa5aaChrM=}
@@ -4993,7 +4994,6 @@ packages:
     dependencies:
       proxy-compare: 2.0.2
       react: 17.0.2
-    dev: false
 
   /value-or-promise/1.0.11:
     resolution: {integrity: sha512-41BrgH+dIbCFXClcSapVs5M6GkENd3gQOJpEfPDNa71LsUGMXDL0jMWpI/Rh7WhX+Aalfz2TTS3Zt5pUsbnhLg==}
