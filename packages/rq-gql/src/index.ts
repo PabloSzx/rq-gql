@@ -17,7 +17,6 @@ import {
   UseQueryOptions,
   UseQueryResult,
 } from "react-query";
-import { proxy } from "valtio";
 
 export type QueryFetcher = <
   TData = Record<string, any>,
@@ -65,10 +64,10 @@ export class RQGQLClient {
       fetchOptions?: Partial<RequestInit>;
     }
   ) {
-    const headers = (this.headers = proxy<{ [K in string]?: string }>({
+    const headers: { [K in string]?: string } = (this.headers = {
       "content-type": "application/json",
       ...options.headers,
-    }));
+    });
 
     const fetchOptions = (this.fetchOptions = { ...options.fetchOptions });
 
