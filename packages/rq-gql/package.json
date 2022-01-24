@@ -11,10 +11,7 @@
   "sideEffects": false,
   "exports": {
     ".": "./dist/index.js",
-    "./preset": {
-      "require": "./dist/preset.cjs",
-      "import": "./dist/preset.js"
-    },
+    "./preset": "./dist/preset.js",
     "./*": "./dist/*.js"
   },
   "main": "dist/index.js",
