@@ -1,5 +1,11 @@
 # rq-gql
 
+## 0.4.1
+
+### Patch Changes
+
+- a67934f: Use CJS instead of ESM
+
 ## 0.4.0
 
 ### Minor Changes
