@@ -1,5 +1,11 @@
 # rq-gql
 
+## 0.4.0
+
+### Minor Changes
+
+- 41dd4f4: Remove valtio usage
+
 ## 0.3.2
 
 ### Patch Changes
