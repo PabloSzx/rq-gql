@@ -6,6 +6,7 @@ import {
   useQuery,
 } from "react-query";
 import { RQGQLClient } from "rq-gql";
+import { proxy } from "valtio";
 
 export const client = new QueryClient();
 
@@ -15,4 +16,5 @@ export const rqGQLClient = new RQGQLClient({
   useQuery,
   useInfiniteQuery,
   useMutation,
+  proxy,
 });

@@ -14,7 +14,7 @@ import type {
   UseQueryOptions,
   UseQueryResult,
 } from "react-query";
-import { proxy } from "valtio";
+import type { proxy } from "valtio";
 
 export type QueryFetcher = <
   TData = Record<string, any>,
@@ -68,6 +68,7 @@ export class RQGQLClient {
       useQuery: typeof ReactQuery.useQuery;
       useMutation: typeof ReactQuery.useMutation;
       useInfiniteQuery: typeof ReactQuery.useInfiniteQuery;
+      proxy: typeof proxy;
     }
   ) {
     this.QueryClientProvider = options.QueryClientProvider;
@@ -75,7 +76,7 @@ export class RQGQLClient {
     this.useMutation = options.useMutation;
     this.useInfiniteQuery = options.useInfiniteQuery;
 
-    const headers = (this.headers = proxy<{ [K in string]?: string }>({
+    const headers = (this.headers = options.proxy<{ [K in string]?: string }>({
       "content-type": "application/json",
       ...options.headers,
     }));
