@@ -1,4 +1,4 @@
-schema: https://learner-model.pablosz.dev/graphql
+schema: https://lm.inf.uach.cl/graphql
 documents:
   - "**/*.{ts,tsx}"
   - "!**/generated/**"

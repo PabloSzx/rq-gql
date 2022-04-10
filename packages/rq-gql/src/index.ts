@@ -2,7 +2,7 @@ import type { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-
 import type { ExecutionResult } from "graphql";
 import { print } from "graphql/language/printer.js";
 import { getOperationAST } from "graphql/utilities/getOperationAST.js";
-import { createContext, createElement, FC, useContext } from "react";
+import { createContext, createElement, FC, ReactNode, useContext } from "react";
 import type * as ReactQuery from "react-query";
 import type {
   QueryClientProviderProps,
@@ -122,10 +122,10 @@ export class RQGQLClient {
   }
 }
 
-export const RQGQLProvider: FC<{ rqGQLClient: RQGQLClient }> = ({
-  children,
-  rqGQLClient: value,
-}) => {
+export const RQGQLProvider: FC<{
+  rqGQLClient: RQGQLClient;
+  children: ReactNode;
+}> = ({ children, rqGQLClient: value }) => {
   return createElement(rqGQLContext.Provider, {
     children,
     value,
@@ -133,7 +133,7 @@ export const RQGQLProvider: FC<{ rqGQLClient: RQGQLClient }> = ({
 };
 
 export const CombinedRQGQLProvider: FC<
-  QueryClientProviderProps & { rqGQLClient: RQGQLClient }
+  QueryClientProviderProps & { rqGQLClient: RQGQLClient; children: ReactNode }
 > = ({ rqGQLClient, ...reactQuery }) => {
   return createElement(rqGQLContext.Provider, {
     children: createElement(rqGQLClient.QueryClientProvider, reactQuery),

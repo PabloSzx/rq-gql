@@ -19,16 +19,16 @@
     "pretty:check": "prettier --check \"**/*.{ts,tsx,json,yaml,js,cjs,mjs,mdx}\""
   },
   "devDependencies": {
-    "@changesets/cli": "^2.19.0",
-    "@types/node": "^16.11.19",
-    "@types/react": "^17.0.38",
-    "bob-esbuild": "^3.2.3",
-    "bob-esbuild-cli": "^3.0.1",
-    "bob-ts": "^3.0.1",
-    "esbuild": "^0.14.11",
-    "prettier": "^2.5.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "typescript": "^4.5.4"
+    "@changesets/cli": "^2.22.0",
+    "@types/node": "^17.0.23",
+    "@types/react": "^18.0.1",
+    "bob-esbuild": "^3.2.6",
+    "bob-esbuild-cli": "^3.0.2",
+    "bob-ts": "^3.1.2",
+    "esbuild": "^0.14.34",
+    "prettier": "^2.6.2",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "typescript": "^4.6.3"
   }
 }
