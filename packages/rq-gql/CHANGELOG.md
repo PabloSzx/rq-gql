@@ -1,5 +1,12 @@
 # rq-gql
 
+## 0.5.0
+
+### Minor Changes
+
+- a69e374: RQGQLClient now requires QueryClientProvider, useQuery, useInfiniteQuery and useMutation from react-query in the constructor
+- 44de845: RQGQLClient requires valtio "proxy" given in constructor
+
 ## 0.4.3
 
 ### Patch Changes
