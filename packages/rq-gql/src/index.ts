@@ -3,17 +3,14 @@ import type { ExecutionResult } from "graphql";
 import { print } from "graphql/language/printer.js";
 import { getOperationAST } from "graphql/utilities/getOperationAST.js";
 import { createContext, createElement, FC, useContext } from "react";
-import {
-  QueryClientProvider,
+import type * as ReactQuery from "react-query";
+import type {
   QueryClientProviderProps,
   QueryKey,
-  useInfiniteQuery,
   UseInfiniteQueryOptions,
   UseInfiniteQueryResult,
-  useMutation,
   UseMutationOptions,
   UseMutationResult,
-  useQuery,
   UseQueryOptions,
   UseQueryResult,
 } from "react-query";
@@ -21,7 +18,7 @@ import { proxy } from "valtio";
 
 export type QueryFetcher = <
   TData = Record<string, any>,
-  TVariables = Record<string, any>
+  TVariables extends Record<string, any> = Record<string, any>
 >(
   query: string,
   variables?: TVariables | undefined
@@ -29,7 +26,7 @@ export type QueryFetcher = <
 
 export type FetchGQL = <
   TData = Record<string, any>,
-  TVariables = Record<string, any>
+  TVariables extends Record<string, any> = Record<string, any>
 >(
   queryDoc: DocumentNode<TData, TVariables> | string,
   variables?: TVariables | undefined
@@ -49,6 +46,10 @@ export class RQGQLClient {
   public readonly headers: { [K in string]?: string };
   public readonly fetchOptions;
   public readonly fetchGQL: FetchGQL;
+  public readonly QueryClientProvider: typeof ReactQuery.QueryClientProvider;
+  public readonly useQuery: typeof ReactQuery.useQuery;
+  public readonly useMutation: typeof ReactQuery.useMutation;
+  public readonly useInfiniteQuery: typeof ReactQuery.useInfiniteQuery;
 
   constructor(
     options: (
@@ -63,8 +64,17 @@ export class RQGQLClient {
     ) & {
       headers?: { [K in string]?: string };
       fetchOptions?: Partial<RequestInit>;
+      QueryClientProvider: typeof ReactQuery.QueryClientProvider;
+      useQuery: typeof ReactQuery.useQuery;
+      useMutation: typeof ReactQuery.useMutation;
+      useInfiniteQuery: typeof ReactQuery.useInfiniteQuery;
     }
   ) {
+    this.QueryClientProvider = options.QueryClientProvider;
+    this.useQuery = options.useQuery;
+    this.useMutation = options.useMutation;
+    this.useInfiniteQuery = options.useInfiniteQuery;
+
     const headers = (this.headers = proxy<{ [K in string]?: string }>({
       "content-type": "application/json",
       ...options.headers,
@@ -126,7 +136,7 @@ export const CombinedRQGQLProvider: FC<
   QueryClientProviderProps & { rqGQLClient: RQGQLClient }
 > = ({ rqGQLClient, ...reactQuery }) => {
   return createElement(rqGQLContext.Provider, {
-    children: createElement(QueryClientProvider, reactQuery),
+    children: createElement(rqGQLClient.QueryClientProvider, reactQuery),
     value: rqGQLClient,
   });
 };
@@ -226,7 +236,7 @@ export function getKey<TVariables>(
 
 export function useGQLQuery<
   TData = Record<string, any>,
-  TVariables = Record<string, any>
+  TVariables extends Record<string, any> = Record<string, any>
 >(
   queryDoc: DocumentNode<TData, TVariables> | string,
   variables?: TVariables,
@@ -235,7 +245,7 @@ export function useGQLQuery<
     "queryKey" | "queryFn"
   >
 ): UseQueryResult<TData, Error> {
-  const { fetchGQL } = useRQGQLContext();
+  const { fetchGQL, useQuery } = useRQGQLContext();
 
   return useQuery(
     getKey(queryDoc, variables),
@@ -246,7 +256,7 @@ export function useGQLQuery<
 
 export function useGQLMutation<
   TData = Record<string, any>,
-  TVariables = Record<string, any>
+  TVariables extends Record<string, any> = Record<string, any>
 >(
   queryDoc: DocumentNode<TData, TVariables> | string,
   options?: Omit<
@@ -254,7 +264,7 @@ export function useGQLMutation<
     "queryKey" | "queryFn"
   >
 ): UseMutationResult<TData, Error, TVariables> {
-  const { fetchGQL } = useRQGQLContext();
+  const { fetchGQL, useMutation } = useRQGQLContext();
 
   return useMutation<TData, Error, TVariables>(
     (variables?: TVariables) =>
@@ -265,13 +275,13 @@ export function useGQLMutation<
 
 export function useGQLInfiniteQuery<
   TData = Record<string, any>,
-  TVariables = Record<string, any>
+  TVariables extends Record<string, any> = Record<string, any>
 >(
   queryDoc: DocumentNode<TData, TVariables> | string,
   getVariables: (pageParam?: any) => TVariables,
   options?: UseInfiniteQueryOptions<TData, Error, TData>
 ): UseInfiniteQueryResult<TData, Error> {
-  const { fetchGQL } = useRQGQLContext();
+  const { fetchGQL, useInfiniteQuery } = useRQGQLContext();
 
   return useInfiniteQuery<TData, Error, TData>(
     options?.queryKey || getKey(queryDoc),
